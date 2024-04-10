@@ -4,10 +4,16 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:time_planner_app/data/data_class/toDo.dart';
-import 'package:time_planner_app/main.dart';
 
-class Noti {
-  void scheduleAlarm(DateTime dateTime, ToDo toDo) async {
+class NotificationPlugin {
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  // A list to hold every unique Id for each alarm scheduled
+  List<int> uniqueNotificationIds = [];
+
+  // Funtion to schedule an alarm
+  Future<void> scheduleAlarm(DateTime dateTime, ToDo toDo) async {
     tz.initializeTimeZones();
 
     final String timeZoneName = await FlutterTimezone.getLocalTimezone();
@@ -21,7 +27,6 @@ class Noti {
 
       DateTime selectedTime = tz.TZDateTime(
         deviceTimeZone,
-        // dateTime.year,
         now.year,
         now.month,
         now.day,
@@ -49,9 +54,9 @@ class Noti {
         final timeUntilNotification = selectedTime.difference(now);
 
         // Unique ID/key for each todo Notification
-        final uniqueNotificationId = UniqueKey().hashCode;
+        int uniqueNotificationId = UniqueKey().hashCode;
 
-        await flutterLocalNotificationsPlugin.zonedSchedule(
+        await _flutterLocalNotificationsPlugin.zonedSchedule(
           uniqueNotificationId,
           toDo.todo,
           toDo.time.toString(),
@@ -62,9 +67,24 @@ class Noti {
               UILocalNotificationDateInterpretation.absoluteTime,
           matchDateTimeComponents: DateTimeComponents.dateAndTime,
         );
+
+        // Add the alarm Id to the list of Ids
+        uniqueNotificationIds.add(uniqueNotificationId);
       }
     } catch (e) {
-      print("Error occured while getting device timeZone: $e");
+      // Catch the error
+    }
+  }
+
+  // Function to cancel the alarm
+  Future<void> cancelAlarm(int index) async {
+    // Locate the index of the alarm that's ot be canceled using the Todo list index
+    if (index >= 0 && index < uniqueNotificationIds.length) {
+      int uniqueNotificationId = uniqueNotificationIds[index];
+      await _flutterLocalNotificationsPlugin.cancel(uniqueNotificationId);
+
+      // remove the already canceled alarm uniqueId from the list
+      uniqueNotificationIds.removeAt(index);
     }
   }
 }

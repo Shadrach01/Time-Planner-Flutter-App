@@ -4,7 +4,6 @@ import 'package:time_planner_app/data/data_class/user_data.dart';
 import 'package:time_planner_app/model/time_planner_model.dart';
 import 'package:time_planner_app/util/button.dart';
 import 'package:time_planner_app/views/todo_list_page.dart';
-import 'package:time_planner_app/views/welcome_screen.dart';
 
 class PersonalDetails extends StatefulWidget {
   const PersonalDetails({super.key});

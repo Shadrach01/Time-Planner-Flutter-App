@@ -42,6 +42,7 @@ class _TodoTileState extends State<TodoTile> {
               PopUpMenu(
                 onDelete: () {
                   model.deleteTodo(displayedTodo);
+                  model.noti.cancelAlarm(widget.todoIndex);
                 },
               )
             ],

@@ -5,20 +5,16 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:time_planner_app/data/data_class/user_data.dart';
 import 'package:time_planner_app/data/db/time_planner_dao.dart';
 import 'package:time_planner_app/data/data_class/toDo.dart';
-import 'package:time_planner_app/main.dart';
+
 import 'package:time_planner_app/notification/noti.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:time_planner_app/data/data_class/toDo.dart';
-import 'package:time_planner_app/main.dart';
 
 class TimePlannerModel extends Model {
   // Instantiate the TimePlannerDao
   final TimePlannerDao _timePlannerDao = TimePlannerDao();
 
   //Instantiate the Notification class
-  final Noti _noti = Noti();
+  final NotificationPlugin _noti = NotificationPlugin();
+  NotificationPlugin get noti => _noti;
 
   // Generater diffferent colors to assign to each tile at random
   static Color generateRandomColor() {
@@ -53,43 +49,6 @@ class TimePlannerModel extends Model {
 
   bool _isLoading = true;
   bool get isLoading => _isLoading;
-
-  // Unique ID/key for each todo Notification
-  final uniqueNotificationId = UniqueKey().hashCode;
-
-  void scheduleAlarm(DateTime dateTime, ToDo toDo) async {
-    // Initialize the timeZone
-    tz.initializeTimeZones();
-    
-    // Get the exact timzone that the device is
-    final String timeZoneName = await FlutterTimezone.getLocalTimezone();
-    tz.Location? deviceTimeZone;
-
-    try {
-      // Get the exact location of the device
-      deviceTimeZone = tz.getLocation(timeZoneName);
-
-    //Get the current local time of the devive
-    final now = tz.TZDateTime.now(deviceTimeZone);
-    // Set the selectedTime to the device datetime
-    DateTime selectedTime = tz.TZDateTime(
-deviceTimeZone,
-now.year,
-now.month,
-now.day,
-now.hour,
-now.minute,
-    );
-    
-    }
-await _noti.showBigTextNotification(
-  id: uniqueNotificationId, 
-title: toDo.todo, 
-body: toDo.time,
- scheduledDate: scheduledDate, 
- fln: flutterLocalNotificationsPlugin
- )
-  }
 
   Future addUserName(UserData userName) async {
     await _timePlannerDao.addUserName(userName);

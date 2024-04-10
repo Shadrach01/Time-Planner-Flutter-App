@@ -1,17 +1,10 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:time_planner_app/data/data_class/toDo.dart';
-import 'package:time_planner_app/main.dart';
 import 'package:time_planner_app/model/time_planner_model.dart';
 import 'package:time_planner_app/util/button.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 class TodoForm extends StatefulWidget {
   final ToDo? editedTodo;
@@ -173,70 +166,7 @@ class _TodoFormState extends State<TodoForm> {
     );
   }
 
-  // void scheduleAlarm(DateTime dateTime, ToDo toDo) async {
-  //   tz.initializeTimeZones();
-  //   // final deviceTimeZone = tz.local;
-  //   // final now = tz.TZDateTime.now(deviceTimeZone);
-
-  //   final String timeZoneName = await FlutterTimezone.getLocalTimezone();
-  //   tz.Location? deviceTimeZone;
-  //   try {
-  //     deviceTimeZone = tz.getLocation(timeZoneName);
-  //     print("DEvice location is : $deviceTimeZone");
-  //     final now = tz.TZDateTime.now(deviceTimeZone);
-  //     print("Device time is : $now");
-  //     DateTime selectedTime = tz.TZDateTime(
-  //       deviceTimeZone,
-  //       // dateTime.year,
-  //       now.year,
-  //       now.month,
-  //       now.day,
-  //       now.hour,
-  //       now.minute,
-  //     );
-  //     selectedTime = dateTime;
-
-  //     // final timeZoneOffset = selectedTime.timeZoneOffset;
-  //     // selectedTime = selectedTime.add(timeZoneOffset);
-
-  //     AndroidNotificationDetails androidPlatformChannelSpecifics =
-  //         const AndroidNotificationDetails(
-  //       'you_can_name_it_whatever',
-  //       'channel_name',
-  //       playSound: true,
-  //       // sound: RawResourceAndroidNotificationSound('notification'),
-  //       importance: Importance.max,
-  //       priority: Priority.high,
-  //     );
-
-  //     var not = NotificationDetails(
-  //       android: androidPlatformChannelSpecifics,
-  //       iOS: const DarwinNotificationDetails(),
-  //     );
-
-  //     if (selectedTime.isAfter(now)) {
-  //       final timeUntilNotification = selectedTime.difference(now);
-
-  //       // Unique ID/key for each todo Notification
-  //       final uniqueNotificationId = UniqueKey().hashCode;
-
-  //       await flutterLocalNotificationsPlugin.zonedSchedule(
-  //         uniqueNotificationId,
-  //         toDo.todo,
-  //         toDo.time.toString(),
-  //         tz.TZDateTime.now(deviceTimeZone).add(timeUntilNotification),
-  //         not,
-  //         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-  //         uiLocalNotificationDateInterpretation:
-  //             UILocalNotificationDateInterpretation.absoluteTime,
-  //         matchDateTimeComponents: DateTimeComponents.dateAndTime,
-  //       );
-  //     }
-  //   } catch (e) {
-  //     print("Error occured while getting device timeZone: $e");
-  //   }
-  // }
-
+  // Function for when the save button has been clicked
   void _onSaveButtonClicked() {
     final scopedModel = ScopedModel.of<TimePlannerModel>(context);
     // Format the DateTime to show only the time
